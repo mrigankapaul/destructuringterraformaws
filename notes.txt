@@ -1,0 +1,42 @@
+Terraform Components
+    Executable (GO)
+    Terrform file (.tf)
+    Terraform plugins (Provider)
+    Terraform state - current state of the configuration
+
+Terraform state ( source of truth)
+    JSON Format
+    Resource Mappings
+    Locking
+    Location
+        - Local
+        - Remote: AWS S3, Azure Blob storage, NFS, Terraform cloud
+    Workspace - Each workspace has a separate state file
+    serial # - to maintain comsistency of the desired state
+
+Terraform Planning
+    - Inspect State
+    - Dependency Graph
+    - Additions, Updated and deletions
+    - Parallel execution
+    - save plan
+
+Blocks
+Object Types - string, number, bool, list - Tuple, map = {a="string", b=2}
+
+#Keyword References
+var.x
+aws_instance.taco
+local.taco_topppings
+module.taco_hut.locations
+
+Terraform Provisioners
+    Last Resort
+    Local or Remote
+variable "amis" {
+    type = "map"
+    default = {
+        us-east-1 = "ami-1234"
+        us-west-1 = "ami-5678
+    }
+}
