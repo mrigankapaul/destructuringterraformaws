@@ -33,10 +33,81 @@ module.taco_hut.locations
 Terraform Provisioners
     Last Resort
     Local or Remote
-variable "amis" {
-    type = "map"
-    default = {
-        us-east-1 = "ami-1234"
-        us-west-1 = "ami-5678
+
+Resource Arguments
+    depends_on
+    count
+    for-each 
+    provider
+
+Multiple sources for Values
+    - File, envrionment variables, -var option or -var-files
+    - Variable precedence - Envrionment, file, command line
+    Select values based of envrionment
+    Split Terraform configuration file
+    
+    #specify default variable and Types
+    variable "envrionment_name" {
+        type = "string"
+        default = "development"
     }
-}
+
+    #specify variable in file
+    envrionment_name = "uat"
+
+    #specify the variable inline
+    terraform plan -var 'envrionment_name=uat'
+
+    #create variable  map 
+    variable "cidr" {
+        type = map(string)
+        default = {
+            development = "10.0.0.0/16"
+            uat = "10.1.0.0/16"
+            production = "10.2.0.0/16"
+        }
+    }
+
+Multiple Environments in Terraform - Workspaces (Hashicorp recommended)
+    - Management of state 
+        - Multiple state file for each environment
+        - Different state file for networking and different for instances
+    - Where are the variable data being stored
+        - Stored in a file
+        - coming in from the command line
+        - or 3rd Party tool
+    - Credentials Management
+    - Balance need to be struck over complexity/management of configuration
+
+Managemnet of variables -
+    main_config.tf   dev    uat         prod
+    common.tfvars
+terraform plan -state = './dev/dev.state' -var-file='common.tfvars' -var-file='./dev/dev.tfvars'
+
+
+Another approach - 
+
+Workspace
+
+    main_config.tf
+    terraform.tfvars
+    terraform workspace new dev  // terraform.tfstate.d
+    terraform plan
+
+
+Envrionment variables
+    AWS_ACCESS_KEY
+    AWS_SECRET_ACCESS_KEY
+    AWS_SHARED_CREDENTIALS_FILE
+    AWS_PROFILE
+Powershell
+    $env:AWS_ACCESS_KEY = ''
+Terraform modules
+    Code reuse
+    Can be stored remote or locally
+        - Terraform registry
+    Root module
+    Versioning
+    Provider inheritence
+    multiple instance(no count)
+    output can send a complex objects
